@@ -1,0 +1,66 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id "application"
+    id "distribution"
+    id "idea"
+    id "jacoco"
+    id "com.github.johnrengelman.shadow" version "5.1.0"
+    id "com.diffplug.gradle.spotless" version "3.25.0"
+    id "de.undercouch.download" version "4.0.0"
+}
+
+description 'epirus core libraries'
+
+ext {
+    web3jVersion = "4.5.18"
+    junitVersion = '5.+'
+    mockitoVersion = "3.+"
+    systemLambdaVersion = "1.0.0"
+    wireMockVersion = "2.25.1"
+}
+
+
+apply {
+    [
+        'jacoco',
+        'java',
+        'javadoc',
+        'repositories',
+        'spotless'
+    ].each { buildScript ->
+        download {
+            src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+            dest "$rootDir/gradle/$buildScript/build.gradle"
+            overwrite true
+            quiet true
+            onlyIfModified true
+        }
+        from("$rootDir/gradle/$buildScript/build.gradle")
+    }
+}
+
+repositories {
+    maven { url "https://dl.bintray.com/ethereum/maven/" }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    implementation "org.web3j:codegen:$web3jVersion",
+            "org.web3j:contracts:$web3jVersion",
+            "org.web3j:core:$web3jVersion",
+            "org.web3j:crypto:$web3jVersion",
+            "org.web3j:hosted-providers:$web3jVersion"
+
+
+    testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion",
+            "org.mockito:mockito-core:$mockitoVersion",
+            "com.github.stefanbirkner:system-lambda:$systemLambdaVersion",
+            "com.github.tomakehurst:wiremock-jre8:$wireMockVersion"
+}
