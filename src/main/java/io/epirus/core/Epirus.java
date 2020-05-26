@@ -18,11 +18,11 @@ import org.web3j.protocol.core.JsonRpc2_0Web3j;
 
 public class Epirus {
 
-    static Web3j buildWeb3j() throws Exception {
+    public static Web3j buildWeb3j() throws Exception {
         return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(Network.MAINNET));
     }
 
-    static Web3j buildWeb3j(Network network) throws Exception {
+    public static Web3j buildWeb3j(Network network) throws Exception {
         return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(network));
     }
 }
