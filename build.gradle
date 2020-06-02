@@ -1,12 +1,13 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id "application"
-    id "distribution"
     id "idea"
     id "jacoco"
+    id "com.jfrog.bintray" version "1.8.4"
     id "com.github.johnrengelman.shadow" version "5.1.0"
     id "com.diffplug.gradle.spotless" version "3.25.0"
+    id 'io.codearte.nexus-staging' version '0.21.1'
+    id "de.marcphilipp.nexus-publish" version "0.4.0"
     id "de.undercouch.download" version "4.0.0"
 }
 
@@ -23,14 +24,17 @@ ext {
 
 apply {
     [
+        'bintray',
         'jacoco',
         'java',
         'javadoc',
         'repositories',
-        'spotless'
+        'publish',
+        'spotless',
+        'junit'
     ].each { buildScript ->
         download {
-            src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+            src "https://raw.githubusercontent.com/epirus-io/build-tools/master/gradle/$buildScript/build.gradle"
             dest "$rootDir/gradle/$buildScript/build.gradle"
             overwrite true
             quiet true

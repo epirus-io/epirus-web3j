@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package io.epirus.core;
+package io.epirus.web3j;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,7 +53,7 @@ public class EpirusHttpServiceProvider {
 
     private static HttpService createHttpServiceWithToken(Network network, String token) {
         String epirusBaseUrl =
-                System.getenv().getOrDefault("EPIRUS_APP_URL", "https://app.epirus.io");
+                System.getenv().getOrDefault("EPIRUS_APP_URL", "https://portal.epirus.io");
         String httpEndpoint =
                 String.format("%s/api/rpc/%s/%s/", epirusBaseUrl, network.getNetworkName(), token);
         return new HttpService(httpEndpoint);
