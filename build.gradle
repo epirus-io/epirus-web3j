@@ -12,6 +12,7 @@ plugins {
 }
 
 description 'epirus core libraries'
+group 'io.epirus'
 
 ext {
     web3jVersion = "4.5.18"
@@ -54,6 +55,7 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
 
 dependencies {
     implementation "org.web3j:codegen:$web3jVersion",
