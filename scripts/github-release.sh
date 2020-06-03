@@ -21,7 +21,7 @@ ensure_version
 
 ensure_product
 
-export PREVIOUS_RELEASE=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases/latest | jq -r '.target_commitish' )
+export PREVIOUS_RELEASE=${$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s "https://api.github.com/repos/epirus-io/$\{PRODUCT\}/releases/latest" | jq -r '.target_commitish | select (.!=null)'):-$(git rev-list --max-parents=0 HEAD)}
 export CHANGELOG=$(git rev-list --format=oneline --abbrev-commit --max-count=50 ${PREVIOUS_RELEASE}..HEAD | jq --slurp --raw-input . )
 
 echo "Creating a new release on GitHub with changes"
