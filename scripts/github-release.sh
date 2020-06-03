@@ -22,7 +22,7 @@ ensure_version
 ensure_product
 echo $PRODUCT
 
-GITHUB_RELEASE=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases/latest | jq -r '.target_commitish | select (.!=null)')
+GITHUB_RELEASE=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s https://api.github.com/repos/${PRODUCT}/releases/latest | jq -r '.target_commitish | select (.!=null)')
 INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
 export PREVIOUS_RELEASE=${GITHUB_RELEASE:-$INITIAL_COMMIT}
 export CHANGELOG=$(git rev-list --format=oneline --abbrev-commit --max-count=50 ${PREVIOUS_RELEASE}..HEAD | jq --slurp --raw-input . )
@@ -40,7 +40,7 @@ API_JSON="{
 }"
 
 
-RESULT=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" --data "$API_JSON" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases)
+RESULT=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" --data "$API_JSON" -s https://api.github.com/repos/${PRODUCT}/releases)
 echo $RESULT
 export UPLOAD_URL=$(echo ${RESULT} | jq -r ".upload_url")
 
