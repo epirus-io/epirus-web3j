@@ -14,7 +14,7 @@ github_clone() {
 
 ensure_version() {
     if [[ -z "$VERSION" ]]; then
-        VERSION="${TRAVIS_BRANCH//release\/}"
+        export VERSION="${TRAVIS_BRANCH//release\/}"
     fi
 
     if [[ "$VERSION" = "" ]]; then
@@ -25,7 +25,7 @@ ensure_version() {
 
 ensure_product() {
     if [[ -z "$PRODUCT" ]]; then
-        PRODUCT="${TRAVIS_REPO_SLUG//release\/}"
+        export PRODUCT="${TRAVIS_REPO_SLUG//release\/}"
     fi
 
     if [[ "$PRODUCT" = "" ]]; then

@@ -20,8 +20,11 @@ source "$SCRIPTS_DIR/common.bash"
 ensure_version
 
 ensure_product
+echo $PRODUCT
 
-export PREVIOUS_RELEASE=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases/latest | jq -r '.target_commitish' )
+GITHUB_RELEASE=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases/latest | jq -r '.target_commitish | select (.!=null)')
+INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+export PREVIOUS_RELEASE=${GITHUB_RELEASE:-$INITIAL_COMMIT}
 export CHANGELOG=$(git rev-list --format=oneline --abbrev-commit --max-count=50 ${PREVIOUS_RELEASE}..HEAD | jq --slurp --raw-input . )
 
 echo "Creating a new release on GitHub with changes"
@@ -37,7 +40,8 @@ API_JSON="{
 }"
 
 
-export RESULT=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" --data "$API_JSON" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases)
+RESULT=$(curl -H "Authorization: token ${GITHUB_PERSONAL_ACCESS_TOKEN}" --data "$API_JSON" -s https://api.github.com/repos/epirus-io/${PRODUCT}/releases)
+echo $RESULT
 export UPLOAD_URL=$(echo ${RESULT} | jq -r ".upload_url")
 
 for FILE in `find ./ -type f -name "${PRODUCT}-${VERSION}.*"`;

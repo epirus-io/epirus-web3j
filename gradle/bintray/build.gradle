@@ -13,7 +13,7 @@ bintray {
     pkg {
         repo = 'maven'
         name = slug
-        userOrg = 'web3j'
+        userOrg = 'epirus-io'
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
     }
