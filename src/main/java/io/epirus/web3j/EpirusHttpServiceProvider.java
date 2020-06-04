@@ -39,7 +39,7 @@ public class EpirusHttpServiceProvider {
     }
 
     private static String getConfigFileLoginToken() throws IOException {
-        if (!EPIRUS_CONFIG_PATH.toFile().exists()) {
+        if (!EPIRUS_CONFIG_PATH.toFile().exists() || System.getenv("EPIRUS_LOGIN_TOKEN") != null) {
             return null;
         }
         String configContents = new String(Files.readAllBytes(EPIRUS_CONFIG_PATH));
