@@ -27,6 +27,7 @@ import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironment
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EpirusHttpTest {
 
@@ -89,6 +90,6 @@ public class EpirusHttpTest {
                         .send()
                         .getBlock()
                         .getHash();
-        System.out.println(netVersion);
+        assertTrue(netVersion.length() > 0);
     }
 }

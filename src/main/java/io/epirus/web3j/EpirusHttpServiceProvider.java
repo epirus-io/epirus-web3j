@@ -38,7 +38,7 @@ public class EpirusHttpServiceProvider {
         return createHttpServiceWithToken(network, envLoginToken);
     }
 
-    private static String getConfigFileLoginToken() throws IOException {
+    public static String getConfigFileLoginToken() throws IOException {
         if (!EPIRUS_CONFIG_PATH.toFile().exists() || System.getenv("EPIRUS_LOGIN_TOKEN") != null) {
             return null;
         }
