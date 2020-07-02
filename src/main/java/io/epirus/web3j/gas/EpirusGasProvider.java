@@ -19,6 +19,7 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.web3j.protocol.Network;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.tx.gas.StaticGasProvider;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -28,13 +29,16 @@ public class EpirusGasProvider extends DefaultGasProvider {
     private static final OkHttpClient client = new OkHttpClient();
 
     public EpirusGasProvider(Network network, GasPrice desiredGasPrice) throws IOException {
-        this(String.format(
+        this(network, String.format(
                 "https://%s.api.epirus.io/gas/price",
                 network.getNetworkName().toLowerCase()), desiredGasPrice);
     }
 
-
-    protected EpirusGasProvider(String url, GasPrice desiredGasPrice) throws IOException {
+    protected EpirusGasProvider(Network network, String url, GasPrice desiredGasPrice) throws IOException {
+        if (!network.equals(Network.RINKEBY) && !network.equals(Network.ROPSTEN)) {
+            gasPrice = GAS_PRICE;
+            return;
+        }
         String authToken = EpirusHttpServiceProvider.getConfigFileLoginToken();
         Request request =
                 new Request.Builder()
