@@ -15,7 +15,6 @@ package io.epirus.web3j;
 import org.web3j.protocol.Network;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
-import org.web3j.tx.gas.ContractGasProvider;
 
 public class Epirus {
 
@@ -24,11 +23,6 @@ public class Epirus {
     }
 
     public static Web3j buildWeb3j(Network network) throws Exception {
-        return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(network));
-    }
-
-    public static Web3j buildWeb3j(Network network, ContractGasProvider gasProvider)
-            throws Exception {
         return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(network));
     }
 }

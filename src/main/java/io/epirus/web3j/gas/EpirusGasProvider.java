@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.epirus.web3j.EpirusHttpServiceProvider;
+import io.epirus.web3j.EpirusAccount;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -43,7 +43,7 @@ public class EpirusGasProvider extends DefaultGasProvider {
             gasPrice = GAS_PRICE;
             return;
         }
-        String authToken = EpirusHttpServiceProvider.getConfigFileLoginToken();
+        String authToken = EpirusAccount.getEpirusLoginToken();
         Request request =
                 new Request.Builder()
                         .url(url)
