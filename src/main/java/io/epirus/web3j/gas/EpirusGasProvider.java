@@ -12,29 +12,33 @@
  */
 package io.epirus.web3j.gas;
 
+import java.io.IOException;
+import java.math.BigInteger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.epirus.web3j.EpirusHttpServiceProvider;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+
 import org.web3j.protocol.Network;
 import org.web3j.tx.gas.DefaultGasProvider;
-import org.web3j.tx.gas.StaticGasProvider;
-
-import java.io.IOException;
-import java.math.BigInteger;
 
 public class EpirusGasProvider extends DefaultGasProvider {
     private BigInteger gasPrice;
     private static final OkHttpClient client = new OkHttpClient();
 
     public EpirusGasProvider(Network network, GasPrice desiredGasPrice) throws IOException {
-        this(network, String.format(
-                "https://%s.api.epirus.io/gas/price",
-                network.getNetworkName().toLowerCase()), desiredGasPrice);
+        this(
+                network,
+                String.format(
+                        "https://%s.api.epirus.io/gas/price",
+                        network.getNetworkName().toLowerCase()),
+                desiredGasPrice);
     }
 
-    protected EpirusGasProvider(Network network, String url, GasPrice desiredGasPrice) throws IOException {
+    protected EpirusGasProvider(Network network, String url, GasPrice desiredGasPrice)
+            throws IOException {
         if (!network.equals(Network.RINKEBY) && !network.equals(Network.ROPSTEN)) {
             gasPrice = GAS_PRICE;
             return;
@@ -66,4 +70,3 @@ public class EpirusGasProvider extends DefaultGasProvider {
         return gasPrice;
     }
 }
-

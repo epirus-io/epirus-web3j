@@ -10,10 +10,22 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package io.epirus.web3j.gas;
+package io.epirus.web3j;
 
-public enum GasPrice {
-    SafeLow,
-    Default,
-    High
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import org.junit.jupiter.api.BeforeAll;
+
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+
+public class HttpMockedTest {
+
+    protected static WireMockServer wireMockServer;
+
+    @BeforeAll
+    public static void setUp() {
+        wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
+        wireMockServer.start();
+        WireMock.configureFor("localhost", wireMockServer.port());
+    }
 }

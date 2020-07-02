@@ -12,15 +12,46 @@
  */
 package io.epirus.web3j.gas;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.web3j.protocol.Network;
-
 import java.math.BigInteger;
 
+import io.epirus.web3j.HttpMockedTest;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import org.web3j.protocol.Network;
+
+import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EpirusGasProviderTest {
+public class EpirusGasProviderTest extends HttpMockedTest {
+
+    @Test
+    public void testEpirusPlatformWorksAgainstMock() throws Exception {
+        stubFor(
+                get(urlPathMatching("/gas/price"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(
+                                                "{\n"
+                                                        + "  \"safeLow\": 3,\n"
+                                                        + "  \"gasPrice\": 2,\n"
+                                                        + "  \"high\": 1\n"
+                                                        + "}")));
+
+        withEnvironmentVariable("EPIRUS_LOGIN_TOKEN", "token")
+                .execute(
+                        () -> {
+                            EpirusGasProvider provider =
+                                    new EpirusGasProvider(
+                                            Network.RINKEBY,
+                                            String.format("%s/gas/price", wireMockServer.baseUrl()),
+                                            GasPrice.High);
+                            assertEquals(provider.getGasPrice(), BigInteger.ONE);
+                        });
+    }
 
     @Test
     @Disabled("requires the CLI to be logged in to pass")
