@@ -18,6 +18,8 @@ ext {
     mockitoVersion = "3.+"
     systemLambdaVersion = "1.0.0"
     wireMockVersion = "2.25.1"
+    okHttpVersion = "3.2.0"
+    jacksonVersion = '2.10.0'
 }
 
 
@@ -60,7 +62,9 @@ dependencies {
             "org.web3j:contracts:$web3jVersion",
             "org.web3j:core:$web3jVersion",
             "org.web3j:crypto:$web3jVersion",
-            "org.web3j:hosted-providers:$web3jVersion"
+            "org.web3j:hosted-providers:$web3jVersion",
+            "com.squareup.okhttp3:okhttp:$okHttpVersion",
+            "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
 
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion",

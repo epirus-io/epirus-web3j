@@ -12,43 +12,18 @@
  */
 package io.epirus.web3j;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import org.web3j.protocol.Network;
 import org.web3j.protocol.http.HttpService;
 
 public class EpirusHttpServiceProvider {
 
-    private static final Path EPIRUS_CONFIG_PATH =
-            Paths.get(System.getProperty("user.home"), ".epirus", ".config");
-
     public static HttpService getEpirusHttpService(final Network network) throws Exception {
-        String envLoginToken =
-                System.getenv().getOrDefault("EPIRUS_LOGIN_TOKEN", getConfigFileLoginToken());
-        if (envLoginToken == null) {
+        String loginToken = EpirusAccount.getEpirusLoginToken();
+        if (loginToken == null) {
             throw new IllegalStateException(
                     "Could not read your Epirus login token. In order to use Web3j without a specified endpoint, you must use the Epirus CLI and log in to the Epirus Platform.");
         }
-        return createHttpServiceWithToken(network, envLoginToken);
-    }
-
-    private static String getConfigFileLoginToken() throws IOException {
-        if (!EPIRUS_CONFIG_PATH.toFile().exists() || System.getenv("EPIRUS_LOGIN_TOKEN") != null) {
-            return null;
-        }
-        String configContents = new String(Files.readAllBytes(EPIRUS_CONFIG_PATH));
-        final ObjectNode node = new ObjectMapper().readValue(configContents, ObjectNode.class);
-        if (node.has("loginToken")) {
-            return node.get("loginToken").asText();
-        }
-        throw new IllegalStateException(
-                "Epirus config file exists but does not contain a login token. Please log in to the Epirus platform using the CLI.");
+        return createHttpServiceWithToken(network, loginToken);
     }
 
     private static HttpService createHttpServiceWithToken(Network network, String token) {

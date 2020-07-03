@@ -12,9 +12,6 @@
  */
 package io.epirus.web3j;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -25,19 +22,10 @@ import org.web3j.protocol.http.HttpService;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EpirusHttpTest {
-
-    private static WireMockServer wireMockServer;
-
-    @BeforeAll
-    public static void setUp() {
-        wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
-        wireMockServer.start();
-        WireMock.configureFor("localhost", wireMockServer.port());
-    }
+public class EpirusHttpTest extends HttpMockedTest {
 
     @Test
     public void testHttpServiceEnvironmentVariable() throws Exception {
@@ -89,6 +77,6 @@ public class EpirusHttpTest {
                         .send()
                         .getBlock()
                         .getHash();
-        System.out.println(netVersion);
+        assertTrue(netVersion.length() > 0);
     }
 }
