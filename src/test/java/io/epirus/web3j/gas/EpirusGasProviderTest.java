@@ -22,7 +22,7 @@ import org.web3j.protocol.Network;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.withEnvironmentVariable;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EpirusGasProviderTest extends HttpMockedTest {
 
@@ -58,5 +58,6 @@ public class EpirusGasProviderTest extends HttpMockedTest {
     public void testEpirusPlatformGasProviderWorks() throws Exception {
         EpirusGasProvider provider = new EpirusGasProvider(Network.RINKEBY, GasPrice.High);
         assertEquals(provider.getGasPrice().compareTo(BigInteger.ONE), 1);
+        assertNotEquals(provider.getGasPrice(), BigInteger.valueOf(4_100_000_000L));
     }
 }

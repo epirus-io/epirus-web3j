@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.epirus.web3j.EpirusAccount;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import org.web3j.protocol.Network;
@@ -51,8 +52,14 @@ public class EpirusGasProvider extends DefaultGasProvider {
                         .addHeader("Authorization", "Bearer " + authToken)
                         .build();
 
-        ResponseBody body = client.newCall(request).execute().body();
+        Response response = client.newCall(request).execute();
 
+        if (response.code() != 200) {
+            gasPrice = GAS_PRICE;
+            return;
+        }
+
+        ResponseBody body = response.body();
         if (body != null) {
             GasPriceOracleResult result =
                     new ObjectMapper().readValue(body.string(), GasPriceOracleResult.class);
