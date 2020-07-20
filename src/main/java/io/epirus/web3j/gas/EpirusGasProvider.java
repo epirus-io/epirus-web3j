@@ -58,6 +58,8 @@ public class EpirusGasProvider extends DefaultGasProvider {
                     new ObjectMapper().readValue(body.string(), GasPriceOracleResult.class);
             gasPrice = result.getDesiredGasPrice(desiredGasPrice);
         }
+        client.dispatcher().executorService().shutdown();
+        client.connectionPool().evictAll();
     }
 
     @Override
