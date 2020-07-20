@@ -34,7 +34,10 @@ public class EpirusHttpTest extends HttpMockedTest {
                 .execute(
                         () -> {
                             HttpService service =
-                                    EpirusHttpServiceProvider.getEpirusHttpService(Network.RINKEBY);
+                                    EpirusHttpServiceProvider.getEpirusHttpService(
+                                            Network.RINKEBY,
+                                            EpirusHttpServiceProvider.createOkHttpClientBuilder()
+                                                    .build());
                             assertEquals(
                                     "http://localhost:8000/api/rpc/rinkeby/token/",
                                     service.getUrl());
