@@ -103,6 +103,6 @@ public class EpirusHttpServiceProvider {
         String httpEndpoint =
                 String.format("%s/api/rpc/%s/%s/", epirusBaseUrl, network.getNetworkName(), token);
 
-        return new HttpService(httpEndpoint);
+        return new HttpService(httpEndpoint, client);
     }
 }
