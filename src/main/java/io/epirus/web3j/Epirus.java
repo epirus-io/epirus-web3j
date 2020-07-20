@@ -12,17 +12,32 @@
  */
 package io.epirus.web3j;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 import org.web3j.protocol.Network;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 
 public class Epirus {
 
+    private static OkHttpClient buildHttpClient() {
+        OkHttpClient.Builder builder = EpirusHttpServiceProvider.createOkHttpClientBuilder();
+        return builder.connectTimeout(60, TimeUnit.SECONDS).build();
+    }
+
     public static Web3j buildWeb3j() throws Exception {
-        return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(Network.MAINNET));
+        return new JsonRpc2_0Web3j(
+                EpirusHttpServiceProvider.getEpirusHttpService(Network.MAINNET, buildHttpClient()));
     }
 
     public static Web3j buildWeb3j(Network network) throws Exception {
-        return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(network));
+        return new JsonRpc2_0Web3j(
+                EpirusHttpServiceProvider.getEpirusHttpService(network, buildHttpClient()));
+    }
+
+    public static Web3j buildWeb3j(Network network, OkHttpClient client) throws Exception {
+        return new JsonRpc2_0Web3j(EpirusHttpServiceProvider.getEpirusHttpService(network, client));
     }
 }
