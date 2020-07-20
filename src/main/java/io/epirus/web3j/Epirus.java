@@ -24,7 +24,11 @@ public class Epirus {
 
     private static OkHttpClient buildHttpClient() {
         OkHttpClient.Builder builder = EpirusHttpServiceProvider.createOkHttpClientBuilder();
-        return builder.connectTimeout(60, TimeUnit.SECONDS).build();
+        return builder.connectTimeout(90, TimeUnit.SECONDS)
+                .callTimeout(90, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
+                .writeTimeout(90, TimeUnit.SECONDS)
+                .build();
     }
 
     public static Web3j buildWeb3j() throws Exception {
